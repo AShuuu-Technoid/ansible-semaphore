@@ -1,0 +1,14 @@
+---
+- hosts: all
+
+  become: true
+  tasks:
+    - name: Check current timezone
+      shell: "timedatectl | grep 'Time zone: Asia/Kolkata (IST,'"
+      register: current_timezone
+      # changed_when: false
+      ignore_errors: true
+
+    - name: Set Date and Time
+      command: "timedatectl set-timezone Asia/Kolkata"
+      when: current_timezone.stdout == ""
